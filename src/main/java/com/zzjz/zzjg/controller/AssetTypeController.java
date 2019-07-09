@@ -5,30 +5,25 @@ import com.zzjz.zzjg.bean.AssetType;
 import com.zzjz.zzjg.bean.BaseResponse;
 import com.zzjz.zzjg.bean.ResultCode;
 import com.zzjz.zzjg.service.AssetTypeService;
+import com.zzjz.zzjg.util.FileUtil;
 import com.zzjz.zzjg.util.MessageUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.system.ApplicationHome;
-import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Set;
@@ -47,8 +42,10 @@ public class AssetTypeController {
     @Autowired
     AssetTypeService assetTypeService;
 
-    @Value("${res_type_path}")
-    String resTypePath;
+    /**
+     * 资产类型图片相对存放路径
+     */
+    private static final String ASSET_TYPE_PATH = "static/image/assetType/";
 
     /**
      * 根据id获取指定资产类型.
@@ -96,7 +93,7 @@ public class AssetTypeController {
     @ApiOperation("根据id删除资产类型")
     @DeleteMapping("/{id}")
     public BaseResponse deleteAssetTypeById(@PathVariable String id) {
-        String patth = getPath("images");
+        String patth = FileUtil.getJarPath("static/image/assetType");
         System.out.println("patth:" + patth);
         System.out.println(1);
         AssetType assetType = assetTypeService.getAssetTypeById(id);
@@ -118,26 +115,6 @@ public class AssetTypeController {
         }
     }
 
-    public static String getPath(String subdirectory){
-        //获取跟目录---与jar包同级目录的upload目录下指定的子目录subdirectory
-        File upload = null;
-        try {
-            //本地测试时获取到的是"工程目录/target/upload/subdirectory
-            File path = new File(ResourceUtils.getURL("classpath:").getPath());
-            if(!path.exists()) {
-                path = new File("");
-            }
-            upload = new File(path.getAbsolutePath(),subdirectory);
-            if(!upload.exists()) {
-                upload.mkdirs();//如果不存在则创建目录
-            }
-            String realPath = upload + File.separator;
-            return realPath;
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException("获取服务器路径发生错误！");
-        }
-    }
-
     /**
      * 新增或修改资产类型信息.
      * @param assetType 资产类型实体
@@ -150,7 +127,7 @@ public class AssetTypeController {
     public BaseResponse saveAssetType(AssetType assetType,
                                       @RequestParam(required = false) MultipartFile file,
                                       HttpServletRequest request) {
-        String pic = "";
+        String delPic = "";
         String newId = null;
         try {
             if (StringUtils.isBlank(assetType.getId())) {
@@ -158,8 +135,8 @@ public class AssetTypeController {
             } else {
                 AssetType oldAssetType = assetTypeService.getAssetTypeById(assetType.getId());
                 if (oldAssetType != null) {
-                    pic = oldAssetType.getPic();
-                    assetType.setPic(pic);
+                    delPic = oldAssetType.getPic();
+                    assetType.setPic(delPic);
                     //判断是否修改了上级资产类型
                     if (!assetType.getPid().equals(oldAssetType.getPid())) {
                         newId = createId(assetType.getPid());
@@ -174,7 +151,8 @@ public class AssetTypeController {
                     return MessageUtil.error("上传图片像素应小于80*80px");
                 }
                 String suffix = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
-                String filePath = resTypePath;
+
+                String filePath = FileUtil.getJarPath(ASSET_TYPE_PATH);
                 File fileDir = new File(filePath);
                 if (!fileDir.exists() && !fileDir.isDirectory()) {
                     if (!fileDir.mkdirs()) {
@@ -185,7 +163,7 @@ public class AssetTypeController {
                 String fileName = UUID.randomUUID() + suffix;
                 Files.write(file.getBytes(), new File(filePath, fileName));
                 //tomcat配置虚拟路径image
-                assetType.setPic("image/resType/" + fileName);
+                assetType.setPic(ASSET_TYPE_PATH + fileName);
             }
 
             assetType.setCreateTime(new Date());
@@ -193,9 +171,9 @@ public class AssetTypeController {
             assetType.setUpdateUser(assetType.getCreateUser());
             assetTypeService.saveResType(assetType, newId);
 
-            if (file != null && !file.isEmpty() && StringUtils.isNotBlank(assetType.getId())) {
+            if (file != null && !file.isEmpty() && StringUtils.isNotBlank(delPic)) {
                 //删除旧图片
-                File oldFile = new File(resTypePath + File.separator + pic);
+                File oldFile = new File(FileUtil.getJarPath("") + delPic);
                 if (oldFile.isFile() && oldFile.exists()) {
                     if (!oldFile.delete()) {
                         return MessageUtil.error("原资产类型图片删除失败!");
