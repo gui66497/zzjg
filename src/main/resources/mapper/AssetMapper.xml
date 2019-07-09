@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zzjz.zzjg.mapper.AssetMapper">
+  <resultMap id="BaseResultMap" type="com.zzjz.zzjg.bean.Asset">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="create_user" jdbcType="VARCHAR" property="createUser" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_user" jdbcType="VARCHAR" property="updateUser" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="manage_ip" jdbcType="VARCHAR" property="manageIp" />
+    <result column="responsible" jdbcType="VARCHAR" property="responsible" />
+    <result column="responsible_phone" jdbcType="VARCHAR" property="responsiblePhone" />
+    <result column="location" jdbcType="VARCHAR" property="location" />
+    <result column="online_status_code" jdbcType="INTEGER" property="onlineStatusCode" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.zzjz.zzjg.bean.Asset">
+    <result column="remarks" jdbcType="LONGVARCHAR" property="remarks" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, name, type, create_user, create_time, update_user, update_time, manage_ip, responsible, 
+    responsible_phone, location, online_status_code
+  </sql>
+  <sql id="Blob_Column_List">
+    remarks
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from asset
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <select id="queryAssetList" resultMap="BaseResultMap" parameterType="com.zzjz.zzjg.bean.AssetRequest">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from asset
+    where 1=1
+    <if test="type != null">
+      and type = #{type}
+    </if>
+    <if test="searchParam != null">
+      and name like '%${searchParam}%' or manage_ip like '%${searchParam}%'
+    </if>
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from asset
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteBatch">
+    delete from asset
+    where id in
+    <foreach collection="array" item="item" index="no" open="("
+             separator="," close=")">
+      #{item}
+    </foreach>
+  </delete>
+  <insert id="insert" parameterType="com.zzjz.zzjg.bean.Asset">
+    insert into asset (id, name, type, 
+      create_user, create_time, update_user, 
+      update_time, manage_ip, responsible, 
+      responsible_phone, location, online_status_code, 
+      remarks)
+    values (#{id,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, 
+      #{createUser,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=VARCHAR}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{manageIp,jdbcType=VARCHAR}, #{responsible,jdbcType=VARCHAR}, 
+      #{responsiblePhone,jdbcType=VARCHAR}, #{location,jdbcType=VARCHAR}, #{onlineStatusCode,jdbcType=INTEGER}, 
+      #{remarks,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.zzjz.zzjg.bean.Asset">
+    insert into asset
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="createUser != null">
+        create_user,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateUser != null">
+        update_user,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="manageIp != null">
+        manage_ip,
+      </if>
+      <if test="responsible != null">
+        responsible,
+      </if>
+      <if test="responsiblePhone != null">
+        responsible_phone,
+      </if>
+      <if test="location != null">
+        location,
+      </if>
+      <if test="onlineStatusCode != null">
+        online_status_code,
+      </if>
+      <if test="remarks != null">
+        remarks,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="createUser != null">
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null">
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="manageIp != null">
+        #{manageIp,jdbcType=VARCHAR},
+      </if>
+      <if test="responsible != null">
+        #{responsible,jdbcType=VARCHAR},
+      </if>
+      <if test="responsiblePhone != null">
+        #{responsiblePhone,jdbcType=VARCHAR},
+      </if>
+      <if test="location != null">
+        #{location,jdbcType=VARCHAR},
+      </if>
+      <if test="onlineStatusCode != null">
+        #{onlineStatusCode,jdbcType=INTEGER},
+      </if>
+      <if test="remarks != null">
+        #{remarks,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zzjz.zzjg.bean.Asset">
+    update asset
+    <set>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="createUser != null">
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null">
+        update_user = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="manageIp != null">
+        manage_ip = #{manageIp,jdbcType=VARCHAR},
+      </if>
+      <if test="responsible != null">
+        responsible = #{responsible,jdbcType=VARCHAR},
+      </if>
+      <if test="responsiblePhone != null">
+        responsible_phone = #{responsiblePhone,jdbcType=VARCHAR},
+      </if>
+      <if test="location != null">
+        location = #{location,jdbcType=VARCHAR},
+      </if>
+      <if test="onlineStatusCode != null">
+        online_status_code = #{onlineStatusCode,jdbcType=INTEGER},
+      </if>
+      <if test="remarks != null">
+        remarks = #{remarks,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.zzjz.zzjg.bean.Asset">
+    update asset
+    set name = #{name,jdbcType=VARCHAR},
+      type = #{type,jdbcType=VARCHAR},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      manage_ip = #{manageIp,jdbcType=VARCHAR},
+      responsible = #{responsible,jdbcType=VARCHAR},
+      responsible_phone = #{responsiblePhone,jdbcType=VARCHAR},
+      location = #{location,jdbcType=VARCHAR},
+      online_status_code = #{onlineStatusCode,jdbcType=INTEGER},
+      remarks = #{remarks,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zzjz.zzjg.bean.Asset">
+    update asset
+    set name = #{name,jdbcType=VARCHAR},
+      type = #{type,jdbcType=VARCHAR},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      manage_ip = #{manageIp,jdbcType=VARCHAR},
+      responsible = #{responsible,jdbcType=VARCHAR},
+      responsible_phone = #{responsiblePhone,jdbcType=VARCHAR},
+      location = #{location,jdbcType=VARCHAR},
+      online_status_code = #{onlineStatusCode,jdbcType=INTEGER}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

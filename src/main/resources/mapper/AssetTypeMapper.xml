@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zzjz.zzjg.mapper.AssetTypeMapper">
+  <resultMap id="BaseResultMap" type="com.zzjz.zzjg.bean.AssetType">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="create_user" jdbcType="VARCHAR" property="createUser" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_user" jdbcType="VARCHAR" property="updateUser" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="name_ch" jdbcType="VARCHAR" property="nameCh" />
+    <result column="name_en" jdbcType="VARCHAR" property="nameEn" />
+    <result column="pid" jdbcType="VARCHAR" property="pid" />
+    <result column="pic" jdbcType="VARCHAR" property="pic" />
+    <result column="pname" jdbcType="VARCHAR" property="pname" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, create_user, create_time, update_user, update_time, name_ch, name_en, pid, pic,pname
+  </sql>
+  <sql id="Column_List">
+    t.id, t.create_user, t.create_time, t.update_user, t.update_time, t.name_ch, t.name_en, t.pid, t.pic,t.pname
+  </sql>
+  <select id="selectById" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />,
+    ifnull((SELECT name_ch FROM asset_type WHERE id = pid),'全部资产') pname
+    from asset_type
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <select id="queryAssetTypeList" resultMap="BaseResultMap" parameterType="java.lang.String">
+    SELECT DISTINCT <include refid="Column_List" />,
+    ifnull((SELECT name_ch FROM asset_type WHERE id = t.pid),'全部资产') pname
+    FROM asset_type t
+    <if test="isAll == 0">
+      RIGHT JOIN asset t1 ON t1.type = t.id
+    </if>
+    ORDER BY t.id,LENGTH(t.id),t.id,LENGTH(t.id)
+  </select>
+  <select id="querySelective" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from asset_type
+    where 1=1
+    <if test="id != null">
+      AND id = #{id,jdbcType=VARCHAR},
+    </if>
+    <if test="createUser != null">
+      AND create_user = #{createUser,jdbcType=VARCHAR},
+    </if>
+    <if test="updateUser != null">
+      AND update_user = #{updateUser,jdbcType=VARCHAR},
+    </if>
+    <if test="nameEn != null">
+      AND name_en = #{nameEn,jdbcType=VARCHAR},
+    </if>
+    <if test="pid != null">
+      AND pid = #{pid,jdbcType=VARCHAR}
+    </if>
+  </select>
+  <select id="queryLastByPId" resultType="com.zzjz.zzjg.bean.AssetType">
+    select
+    <include refid="Base_Column_List" />
+    from asset_type
+    where pid = #{pid,jdbcType=VARCHAR}
+    order by LENGTH(id) desc, id desc
+    limit 1
+  </select>
+  <delete id="deleteById" parameterType="java.lang.String">
+    delete from asset_type
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.zzjz.zzjg.bean.AssetType">
+    insert into asset_type (id, create_user, create_time, 
+      update_user, update_time, name_ch, 
+      name_en, pid, pic)
+    values (#{id,jdbcType=VARCHAR}, #{createUser,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateUser,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{nameCh,jdbcType=VARCHAR}, 
+      #{nameEn,jdbcType=VARCHAR}, #{pid,jdbcType=VARCHAR}, #{pic,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.zzjz.zzjg.bean.AssetType">
+    insert into asset_type
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="createUser != null">
+        create_user,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateUser != null">
+        update_user,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="nameCh != null">
+        name_ch,
+      </if>
+      <if test="nameEn != null">
+        name_en,
+      </if>
+      <if test="pid != null">
+        pid,
+      </if>
+      <if test="pic != null">
+        pic,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="createUser != null">
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null">
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="nameCh != null">
+        #{nameCh,jdbcType=VARCHAR},
+      </if>
+      <if test="nameEn != null">
+        #{nameEn,jdbcType=VARCHAR},
+      </if>
+      <if test="pid != null">
+        #{pid,jdbcType=VARCHAR},
+      </if>
+      <if test="pic != null">
+        #{pic,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zzjz.zzjg.bean.AssetType">
+    update asset_type
+    <set>
+      <if test="createUser != null">
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null">
+        update_user = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="nameCh != null">
+        name_ch = #{nameCh,jdbcType=VARCHAR},
+      </if>
+      <if test="nameEn != null">
+        name_en = #{nameEn,jdbcType=VARCHAR},
+      </if>
+      <if test="pid != null">
+        pid = #{pid,jdbcType=VARCHAR},
+      </if>
+      <if test="pic != null">
+        pic = #{pic,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zzjz.zzjg.bean.AssetType">
+    update asset_type
+    set create_user = #{createUser,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      name_ch = #{nameCh,jdbcType=VARCHAR},
+      name_en = #{nameEn,jdbcType=VARCHAR},
+      pid = #{pid,jdbcType=VARCHAR},
+      pic = #{pic,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateId">
+    update asset_type
+    set smc_id = #{newId,jdbcType=VARCHAR}
+    where smc_id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>
