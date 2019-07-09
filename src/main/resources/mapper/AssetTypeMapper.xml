@@ -20,7 +20,7 @@
     t.id, t.create_user, t.create_time, t.update_user, t.update_time, t.name_ch, t.name_en, t.pid, t.pic,t.pname
   </sql>
   <select id="selectById" parameterType="java.lang.String" resultMap="BaseResultMap">
-    select 
+    select
     <include refid="Base_Column_List" />,
     ifnull((SELECT name_ch FROM asset_type WHERE id = pid),'全部资产') pname
     from asset_type

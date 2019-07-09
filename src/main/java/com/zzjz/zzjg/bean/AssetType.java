@@ -2,7 +2,14 @@ package com.zzjz.zzjg.bean;
 
 import java.util.Date;
 
+/**
+ * @ClassName: AssetType
+ * @Description:
+ * @author 房桂堂
+ * @date 2019/7/5 10:21
+ */
 public class AssetType {
+
     private String id;
 
     private String createUser;
@@ -22,6 +29,22 @@ public class AssetType {
     private String pic;
 
     private String pname;
+
+    @Override
+    public int hashCode() {
+        int result = 17;
+        result = result * 31 + id.hashCode();
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object var1) {
+        if (var1 instanceof AssetType) {
+            AssetType assetType = (AssetType) var1;
+            return id.equals(assetType.getId());
+        }
+        return false;
+    }
 
     public String getId() {
         return id;
@@ -100,6 +123,6 @@ public class AssetType {
     }
 
     public void setPname(String pname) {
-        this.pname = pname == null ? null : pname.trim();
+        this.pname = pname;
     }
 }
