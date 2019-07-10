@@ -27,6 +27,12 @@ public interface AssetService {
     List<Asset> getAssetList(AssetRequest request);
 
     /**
+     * 获取所有资产信息.
+     * @return 资产列表
+     */
+    List<Asset> getAllAsset();
+
+    /**
      * 根据id删除资产.
      * @param idArr id数组
      * @return flag

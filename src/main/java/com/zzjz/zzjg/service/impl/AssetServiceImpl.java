@@ -34,6 +34,11 @@ public class AssetServiceImpl implements AssetService {
     }
 
     @Override
+    public List<Asset> getAllAsset() {
+        return assetMapper.queryAllAsset();
+    }
+
+    @Override
     public boolean deleteByIdArr(String[] idArr) {
         return assetMapper.deleteBatch(idArr) > 0;
     }

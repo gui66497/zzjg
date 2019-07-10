@@ -7,6 +7,7 @@ import com.zzjz.zzjg.bean.AssetRequest;
 import com.zzjz.zzjg.bean.BaseResponse;
 import com.zzjz.zzjg.bean.ResultCode;
 import com.zzjz.zzjg.service.AssetService;
+import com.zzjz.zzjg.util.ExcelUtils;
 import com.zzjz.zzjg.util.MessageUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.Date;
 import java.util.List;
@@ -96,7 +98,7 @@ public class AssetController {
      * @param asset 资产信息
      * @return 结果
      */
-    @ApiOperation(value = "新增或修改资产", notes = "根据id来区分新增与修改")
+    @ApiOperation(value = "新增或修改资产", notes = "根据id是否存在来区分新增与修改")
     @PostMapping("/addOrUpdate")
     public BaseResponse addAsset(@Valid @RequestBody Asset asset) {
         boolean result;
@@ -112,13 +114,25 @@ public class AssetController {
         } else {
             //修改
             asset.setUpdateTime(new Date());
+            Asset nowAsset = assetService.selectAssetById(asset.getId());
+            if (nowAsset == null) {
+                return MessageUtil.error("资产修改失败，不存在id为 " + asset.getId() + " 的资产");
+            }
             result = assetService.updateAsset(asset);
             message = "资产修改成功";
         }
-        if (result) {
-            return MessageUtil.success(message);
-        }
-        return MessageUtil.error(message);
+        return result ? MessageUtil.success(message) : MessageUtil.error("资产保存失败");
+    }
+
+    /**
+     * 资产信息导出excel.
+     * @param response response
+     */
+    @ApiOperation(value = "资产信息导出excel")
+    @GetMapping("/excel/export")
+    public void exportAsset(HttpServletResponse response) {
+        List<Asset> assetList = assetService.getAllAsset();
+        ExcelUtils.exportExcel(assetList, "资产导出", "导出sheet1", Asset.class, "资产导出.xls", response);
     }
 
 

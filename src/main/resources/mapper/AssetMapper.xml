@@ -5,7 +5,9 @@
     <id column="id" jdbcType="VARCHAR" property="id" />
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="type_name" jdbcType="VARCHAR" property="typeName" />
     <result column="organize_id" jdbcType="VARCHAR" property="organizeId" />
+    <result column="organize_name" jdbcType="VARCHAR" property="organizeName" />
     <result column="create_user" jdbcType="VARCHAR" property="createUser" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_user" jdbcType="VARCHAR" property="updateUser" />
@@ -23,6 +25,10 @@
     id, name, type, organize_id, create_user, create_time, update_user, update_time, manage_ip, responsible,
     responsible_phone, location, online_status_code
   </sql>
+  <sql id="Column_List">
+    a.id, a.name, a.type, a.organize_id, a.create_user, a.create_time, a.update_user, a.update_time, a.manage_ip, a.responsible,
+    a.responsible_phone, a.location, a.online_status_code
+  </sql>
   <sql id="Blob_Column_List">
     remarks
   </sql>
@@ -36,8 +42,7 @@
   </select>
   <select id="queryAssetList" resultMap="BaseResultMap" parameterType="com.zzjz.zzjg.bean.AssetRequest">
     select
-    <include refid="Base_Column_List" />
-    ,
+    <include refid="Base_Column_List" />,
     <include refid="Blob_Column_List" />
     from asset
     where 1=1
@@ -50,6 +55,15 @@
     <if test="searchParam != null">
       and name like '%${searchParam}%' or manage_ip like '%${searchParam}%'
     </if>
+  </select>
+  <select id="queryAllAsset" resultMap="BaseResultMap">
+    select
+    <include refid="Column_List" />,
+    a.remarks,at.name_ch type_name,o.name organize_name
+    from asset a
+    left join asset_type at on a.type = at.id
+    left join organization o on a.organize_id = o.id
+    where 1=1
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from asset

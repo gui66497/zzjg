@@ -53,5 +53,10 @@ public interface AssetMapper {
      */
     List<Asset> queryAssetList(AssetRequest asset);
 
+    /**
+     * 查询所有资产信息.
+     * @return 资产列表
+     */
+    List<Asset> queryAllAsset();
 
 }
