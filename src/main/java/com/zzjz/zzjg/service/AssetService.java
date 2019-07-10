@@ -3,7 +3,6 @@ package com.zzjz.zzjg.service;
 import com.zzjz.zzjg.bean.Asset;
 import com.zzjz.zzjg.bean.AssetRequest;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 /**
@@ -52,4 +51,27 @@ public interface AssetService {
      * @return 结果
      */
     boolean updateAsset(Asset asset);
+
+    /**
+     * 根据资产IP和资产类型查询资产.
+     * @param ip ip
+     * @param typeName 类型名称
+     * @return 资产
+     */
+    List<Asset> findByIpAndTypeName(String ip, String typeName);
+
+    /**
+     * 根据资产IP和组织机构查询资产.
+     * @param ip ip
+     * @param organizeName 组织机构名称
+     * @return 资产
+     */
+    List<Asset> findByIpAndOrganizeName(String ip, String organizeName);
+
+    /**
+     * 批量新增.
+     * @param assetList 资产信息
+     * @return 结果
+     */
+    boolean batchInsert(List<Asset> assetList);
 }

@@ -67,4 +67,10 @@ public interface AssetTypeMapper {
      */
     int updateId(@Param("id") String id, @Param("newId") String newId);
 
+    /**
+     * 多条件查询资产类型.
+     * @param assetType 资产类型实体
+     * @return 结果
+     */
+    List<AssetType> find(AssetType assetType);
 }

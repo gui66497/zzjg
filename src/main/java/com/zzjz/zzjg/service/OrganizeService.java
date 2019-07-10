@@ -1,6 +1,7 @@
 package com.zzjz.zzjg.service;
 
 import com.zzjz.zzjg.bean.Organization;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -18,10 +19,16 @@ public interface OrganizeService {
     Organization getOrganizeById(String id);
 
     /**
-     * 查询所有资产类型.
+     * 查询所有组织机构.
      * @param isAll 是否全部显示，1是,0只显示有资产的类型
-     * @return 资产类型列表
+     * @return 组织机构列表
      */
     Set<Organization> getOrganizeList(String isAll);
 
+    /**
+     * 多条件查询组织机构.
+     * @param organization 组织机构实体
+     * @return 组织机构
+     */
+    List<Organization> find(Organization organization);
 }

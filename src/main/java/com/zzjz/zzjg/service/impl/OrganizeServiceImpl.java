@@ -40,6 +40,11 @@ public class OrganizeServiceImpl implements OrganizeService {
         return organizationSet;
     }
 
+    @Override
+    public List<Organization> find(Organization organization) {
+        return organizationMapper.find(organization);
+    }
+
     /**
      * 根据资产类型找到父级资产类型.
      * @param organizeSet 资产类型列表

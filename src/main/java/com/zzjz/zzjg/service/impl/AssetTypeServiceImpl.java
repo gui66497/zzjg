@@ -100,6 +100,11 @@ public class AssetTypeServiceImpl implements AssetTypeService {
         return assetTypeMapper.updateByPrimaryKeySelective(assetType) > 0;
     }
 
+    @Override
+    public List<AssetType> find(AssetType assetType) {
+        return assetTypeMapper.find(assetType);
+    }
+
     /**
      * 根据资产类型找到父级资产类型.
      * @param assetTypeSet 资产类型列表

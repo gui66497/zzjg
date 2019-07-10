@@ -26,7 +26,16 @@
       </if>
       ORDER BY o.id,LENGTH(o.id),o.id,LENGTH(o.id)
     </select>
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+  <select id="find" resultMap="BaseResultMap" parameterType="com.zzjz.zzjg.bean.Organization">
+    SELECT
+    <include refid="Base_Column_List" />
+    FROM organization
+    where 1=1
+    <if test="name != null">
+      and name = #{name,jdbcType=VARCHAR}
+    </if>
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from organization
     where id = #{id,jdbcType=VARCHAR}
   </delete>

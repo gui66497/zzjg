@@ -33,4 +33,11 @@ public interface OrganizationMapper {
      * @return 组织机构
      */
     List<Organization> queryOrganizeList(@Param("isAll") String isAll);
+
+    /**
+     * 多条件查询组织机构.
+     * @param organization 组织机构实体
+     * @return 结果
+     */
+    List<Organization> find(Organization organization);
 }

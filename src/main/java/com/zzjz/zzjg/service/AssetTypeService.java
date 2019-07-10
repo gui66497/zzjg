@@ -2,7 +2,6 @@ package com.zzjz.zzjg.service;
 
 import com.zzjz.zzjg.bean.AssetType;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -69,5 +68,12 @@ public interface AssetTypeService {
     boolean insertAssetType(AssetType assetType);
 
     boolean updateAssetTypeById(AssetType assetType);
+
+    /**
+     * 多条件查询资产类型.
+     * @param assetType 资产类型实体
+     * @return 结果
+     */
+    List<AssetType> find(AssetType assetType);
 
 }

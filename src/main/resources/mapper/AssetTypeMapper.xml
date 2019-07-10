@@ -64,6 +64,18 @@
     order by LENGTH(id) desc, id desc
     limit 1
   </select>
+  <select id="find" resultMap="BaseResultMap" parameterType="com.zzjz.zzjg.bean.AssetType">
+    SELECT
+    <include refid="Base_Column_List" />
+    FROM asset_type
+    where 1=1
+    <if test="nameCh != null">
+      and name_ch = #{nameCh,jdbcType=VARCHAR}
+    </if>
+    <if test="nameEn != null">
+      and name_en = #{nameEn,jdbcType=VARCHAR}
+    </if>
+  </select>
   <delete id="deleteById" parameterType="java.lang.String">
     delete from asset_type
     where id = #{id,jdbcType=VARCHAR}

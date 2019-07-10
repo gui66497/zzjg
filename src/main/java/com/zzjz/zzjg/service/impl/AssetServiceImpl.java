@@ -53,5 +53,19 @@ public class AssetServiceImpl implements AssetService {
         return assetMapper.updateByPrimaryKeySelective(asset) > 0;
     }
 
+    @Override
+    public List<Asset> findByIpAndTypeName(String ip, String typeName) {
+        return assetMapper.findByIpAndTypeName(ip, typeName);
+    }
+
+    @Override
+    public List<Asset> findByIpAndOrganizeName(String ip, String organizeName) {
+        return assetMapper.findByIpAndOrganizeName(ip, organizeName);
+    }
+
+    @Override
+    public boolean batchInsert(List<Asset> assetList) {
+        return assetMapper.batchInsert(assetList) > 0;
+    }
 
 }

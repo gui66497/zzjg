@@ -65,6 +65,24 @@
     left join organization o on a.organize_id = o.id
     where 1=1
   </select>
+  <select id="findByIpAndTypeName" resultMap="BaseResultMap">
+    select
+    <include refid="Column_List" />,at.name_ch type_name
+    from asset a
+    left join asset_type at on a.type = at.id
+    where 1=1
+    and a.manage_ip = #{ip,jdbcType=VARCHAR}
+    and at.name_ch = #{typeName,jdbcType=VARCHAR}
+  </select>
+  <select id="findByIpAndOrganizeName" resultType="com.zzjz.zzjg.bean.Asset">
+    select
+    <include refid="Column_List" />,o.name organize_name
+    from asset a
+    left join organization o on a.organize_id = o.id
+    where 1=1
+    and a.manage_ip = #{ip,jdbcType=VARCHAR}
+    and o.name = #{organizeName,jdbcType=VARCHAR}
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from asset
     where id = #{id,jdbcType=VARCHAR}
@@ -173,6 +191,18 @@
         #{remarks,jdbcType=LONGVARCHAR},
       </if>
     </trim>
+  </insert>
+  <insert id="batchInsert" parameterType="java.util.List">
+    insert into asset (
+    id, name, type, organize_id, create_user, create_time, update_user, update_time, manage_ip, responsible,
+    responsible_phone, location, online_status_code
+    ) values
+    <foreach collection="list" item="item" index="index" separator=",">
+      (#{item.id}, #{item.name}, #{item.type},
+      #{item.organizeId}, #{item.createUser}, #{item.createTime},
+      #{item.updateUser}, #{item.updateTime}, #{item.manageIp},
+      #{item.responsible}, #{item.responsiblePhone}, #{item.location}, #{item.onlineStatusCode})
+    </foreach>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.zzjz.zzjg.bean.Asset">
     update asset

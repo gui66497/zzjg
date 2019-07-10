@@ -3,6 +3,7 @@ package com.zzjz.zzjg.mapper;
 import com.zzjz.zzjg.bean.Asset;
 import com.zzjz.zzjg.bean.AssetRequest;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 import java.util.List;
 
@@ -58,5 +59,28 @@ public interface AssetMapper {
      * @return 资产列表
      */
     List<Asset> queryAllAsset();
+
+    /**
+     * 根据资产IP和资产类型查询资产.
+     * @param ip ip
+     * @param typeName 类型名称
+     * @return 资产
+     */
+    List<Asset> findByIpAndTypeName(@Param("ip") String ip, @Param("typeName") String typeName);
+
+    /**
+     * 根据资产IP和组织机构查询资产.
+     * @param ip ip
+     * @param organizeName 组织机构名称
+     * @return 资产
+     */
+    List<Asset> findByIpAndOrganizeName(@Param("ip") String ip, @Param("organizeName") String organizeName);
+
+    /**
+     * 批量新增.
+     * @param assetList 资产信息
+     * @return 结果
+     */
+    int batchInsert(List<Asset> assetList);
 
 }
