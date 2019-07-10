@@ -1,7 +1,6 @@
 package com.zzjz.zzjg.bean;
 
 import io.swagger.annotations.ApiModel;
-
 import javax.validation.constraints.NotBlank;
 import java.util.Date;
 
@@ -19,6 +18,8 @@ public class Asset {
 
     @NotBlank(message = "资产类型不能为空")
     private String type;
+
+    private String organizeId;
 
     private String createUser;
 
@@ -142,5 +143,13 @@ public class Asset {
 
     public void setRemarks(String remarks) {
         this.remarks = remarks == null ? null : remarks.trim();
+    }
+
+    public String getOrganizeId() {
+        return organizeId;
+    }
+
+    public void setOrganizeId(String organizeId) {
+        this.organizeId = organizeId;
     }
 }

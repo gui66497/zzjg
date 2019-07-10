@@ -1,6 +1,7 @@
 package com.zzjz.zzjg.bean;
 
 import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * @author 房桂堂
@@ -11,13 +12,21 @@ import io.swagger.annotations.ApiModel;
 public class AssetRequest extends BaseRequest {
 
     /**
-     * 资产类型
+     * 资产类型id
      */
+    @ApiModelProperty("资产类型id")
     private String type;
+
+    /**
+     * 组织机构id
+     */
+    @ApiModelProperty("组织机构id")
+    private String organizeId;
 
     /**
      * 查询参数 资产IP或资产名
      */
+    @ApiModelProperty("查询参数 资产IP或资产名")
     private String searchParam;
 
     public String getType() {
@@ -34,5 +43,13 @@ public class AssetRequest extends BaseRequest {
 
     public void setSearchParam(String searchParam) {
         this.searchParam = searchParam;
+    }
+
+    public String getOrganizeId() {
+        return organizeId;
+    }
+
+    public void setOrganizeId(String organizeId) {
+        this.organizeId = organizeId;
     }
 }

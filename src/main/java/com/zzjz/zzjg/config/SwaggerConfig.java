@@ -1,4 +1,4 @@
-package com.zzjz.zzjg;
+package com.zzjz.zzjg.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

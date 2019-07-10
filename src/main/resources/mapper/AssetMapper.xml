@@ -5,6 +5,7 @@
     <id column="id" jdbcType="VARCHAR" property="id" />
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="organize_id" jdbcType="VARCHAR" property="organizeId" />
     <result column="create_user" jdbcType="VARCHAR" property="createUser" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_user" jdbcType="VARCHAR" property="updateUser" />
@@ -19,7 +20,7 @@
     <result column="remarks" jdbcType="LONGVARCHAR" property="remarks" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, name, type, create_user, create_time, update_user, update_time, manage_ip, responsible, 
+    id, name, type, organize_id, create_user, create_time, update_user, update_time, manage_ip, responsible,
     responsible_phone, location, online_status_code
   </sql>
   <sql id="Blob_Column_List">
@@ -42,6 +43,9 @@
     where 1=1
     <if test="type != null">
       and type = #{type}
+    </if>
+    <if test="organizeId != null">
+      and organize_id = #{organizeId}
     </if>
     <if test="searchParam != null">
       and name like '%${searchParam}%' or manage_ip like '%${searchParam}%'
