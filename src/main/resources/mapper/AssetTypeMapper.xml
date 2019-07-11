@@ -11,13 +11,13 @@
     <result column="name_en" jdbcType="VARCHAR" property="nameEn" />
     <result column="pid" jdbcType="VARCHAR" property="pid" />
     <result column="pic" jdbcType="VARCHAR" property="pic" />
-    <result column="pname" jdbcType="VARCHAR" property="pname" />
+    <result column="pname" jdbcType="VARCHAR" property="pName" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, create_user, create_time, update_user, update_time, name_ch, name_en, pid, pic,pname
+    id, create_user, create_time, update_user, update_time, name_ch, name_en, pid, pic
   </sql>
   <sql id="Column_List">
-    t.id, t.create_user, t.create_time, t.update_user, t.update_time, t.name_ch, t.name_en, t.pid, t.pic,t.pname
+    t.id, t.create_user, t.create_time, t.update_user, t.update_time, t.name_ch, t.name_en, t.pid, t.pic
   </sql>
   <select id="selectById" parameterType="java.lang.String" resultMap="BaseResultMap">
     select

@@ -1,5 +1,8 @@
 package com.zzjz.zzjg.bean;
 
+import cn.afterturn.easypoi.excel.annotation.Excel;
+import io.swagger.annotations.ApiModel;
+import javax.validation.constraints.NotBlank;
 import java.util.Date;
 
 /**
@@ -8,27 +11,36 @@ import java.util.Date;
  * @author 房桂堂
  * @date 2019/7/5 10:21
  */
+@ApiModel("资产类型实体")
 public class AssetType {
 
+    @Excel(name = "ID", width=20)
+    @NotBlank(message = "id不能为空")
     private String id;
 
     private String createUser;
 
+    @Excel(name = "创建时间", orderNum = "3", exportFormat = "yyyy-MM-dd HH:mm:ss", width=20)
     private Date createTime;
 
     private String updateUser;
 
     private Date updateTime;
 
+    @Excel(name = "名称", orderNum = "1", width=15)
+    @NotBlank(message = "名称不能为空")
     private String nameCh;
 
+    @Excel(name = "英文名称", orderNum = "2", width=15)
     private String nameEn;
 
     private String pid;
 
+    @Excel(name = "路径", orderNum = "5", width=28)
     private String pic;
 
-    private String pname;
+    @Excel(name = "父节点", orderNum = "4", width=15)
+    private String pName;
 
     @Override
     public int hashCode() {
@@ -118,11 +130,11 @@ public class AssetType {
         this.pic = pic == null ? null : pic.trim();
     }
 
-    public String getPname() {
-        return pname;
+    public String getpName() {
+        return pName;
     }
 
-    public void setPname(String pname) {
-        this.pname = pname;
+    public void setpName(String pName) {
+        this.pName = pName;
     }
 }

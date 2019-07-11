@@ -55,6 +55,7 @@
     <if test="searchParam != null">
       and name like '%${searchParam}%' or manage_ip like '%${searchParam}%'
     </if>
+    order by update_time desc,create_time desc
   </select>
   <select id="queryAllAsset" resultMap="BaseResultMap">
     select
@@ -119,6 +120,9 @@
       <if test="type != null">
         type,
       </if>
+      <if test="organizeId != null">
+        organize_id,
+      </if>
       <if test="createUser != null">
         create_user,
       </if>
@@ -159,6 +163,9 @@
       </if>
       <if test="type != null">
         #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="organizeId != null">
+        #{organizeId,jdbcType=VARCHAR},
       </if>
       <if test="createUser != null">
         #{createUser,jdbcType=VARCHAR},

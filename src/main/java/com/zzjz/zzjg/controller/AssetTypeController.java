@@ -5,6 +5,7 @@ import com.zzjz.zzjg.bean.AssetType;
 import com.zzjz.zzjg.bean.BaseResponse;
 import com.zzjz.zzjg.bean.ResultCode;
 import com.zzjz.zzjg.service.AssetTypeService;
+import com.zzjz.zzjg.util.ExcelUtils;
 import com.zzjz.zzjg.util.FileUtil;
 import com.zzjz.zzjg.util.MessageUtil;
 import io.swagger.annotations.Api;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.ArrayList;
@@ -186,6 +188,17 @@ public class AssetTypeController {
             return MessageUtil.error("资产类型[" + assetType.getNameCh() + "]保存失败");
         }
         return MessageUtil.success("保存资产类型[" + assetType.getNameCh() + "]成功");
+    }
+
+    /**
+     * 资产类型信息导出excel.
+     * @param response response
+     */
+    @ApiOperation(value = "资产类型信息导出excel")
+    @GetMapping("/excel/export")
+    public void exportAssetType(HttpServletResponse response) {
+        Set<AssetType> assetTypeList = assetTypeService.getAssetTypeList("1");
+        ExcelUtils.exportExcel(new ArrayList<>(assetTypeList), "资产类型导出", "导出sheet1", AssetType.class, "资产类型导出.xls", response);
     }
 
     /**
