@@ -149,6 +149,16 @@
       </if>
     </trim>
   </insert>
+  <insert id="batchInsert" parameterType="java.util.List">
+    insert into asset_type (
+    id, create_user, create_time, update_user, update_time, name_ch, name_en, pid, pic
+    ) values
+    <foreach collection="list" item="item" index="index" separator=",">
+      (#{item.id}, #{item.createUser}, #{item.createTime},
+      #{item.updateUser}, #{item.updateTime}, #{item.nameCh},
+      #{item.nameEn}, #{item.pid}, #{item.pic})
+    </foreach>
+  </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.zzjz.zzjg.bean.AssetType">
     update asset_type
     <set>

@@ -34,6 +34,7 @@ public class AssetType {
     @Excel(name = "英文名称", orderNum = "2", width=15)
     private String nameEn;
 
+    @Excel(name = "父节点ID", orderNum = "2", width=15)
     private String pid;
 
     @Excel(name = "路径", orderNum = "5", width=28)
@@ -56,6 +57,15 @@ public class AssetType {
             return id.equals(assetType.getId());
         }
         return false;
+    }
+
+    public AssetType() {
+    }
+
+    public AssetType(String nameCh, String nameEn, String pid) {
+        this.nameCh = nameCh;
+        this.nameEn = nameEn;
+        this.pid = pid;
     }
 
     public String getId() {

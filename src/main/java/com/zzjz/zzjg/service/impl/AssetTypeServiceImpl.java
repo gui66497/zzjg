@@ -105,6 +105,11 @@ public class AssetTypeServiceImpl implements AssetTypeService {
         return assetTypeMapper.find(assetType);
     }
 
+    @Override
+    public boolean batchInsert(List<AssetType> assetTypeList) {
+        return assetTypeMapper.batchInsert(assetTypeList) > 0;
+    }
+
     /**
      * 根据资产类型找到父级资产类型.
      * @param assetTypeSet 资产类型列表

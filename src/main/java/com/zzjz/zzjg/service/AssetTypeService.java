@@ -76,4 +76,11 @@ public interface AssetTypeService {
      */
     List<AssetType> find(AssetType assetType);
 
+    /**
+     * 批量插入资产类型.
+     * @param assetTypeList 资产类型列表
+     * @return 结果
+     */
+    boolean batchInsert(List<AssetType> assetTypeList);
+
 }

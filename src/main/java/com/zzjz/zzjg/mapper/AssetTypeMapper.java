@@ -73,4 +73,11 @@ public interface AssetTypeMapper {
      * @return 结果
      */
     List<AssetType> find(AssetType assetType);
+
+    /**
+     * 批量新增.
+     * @param assetTypeList 资产类型列表
+     * @return 结果
+     */
+    int batchInsert(List<AssetType> assetTypeList);
 }
