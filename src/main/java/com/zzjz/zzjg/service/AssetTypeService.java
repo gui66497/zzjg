@@ -67,6 +67,11 @@ public interface AssetTypeService {
      */
     boolean insertAssetType(AssetType assetType);
 
+    /**
+     * 根据id修改资产类型.
+     * @param assetType 资产类型
+     * @return 结果
+     */
     boolean updateAssetTypeById(AssetType assetType);
 
     /**

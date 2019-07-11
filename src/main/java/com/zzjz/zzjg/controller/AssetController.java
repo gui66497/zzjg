@@ -163,7 +163,7 @@ public class AssetController {
      * 导入excel资产信息.
      * @param file excel文件
      */
-    @ApiOperation(value = "导入excel资产信息")
+    @ApiOperation(value = "导入excel资产信息", notes = "模板文件下载：http://192.168.1.129:8080/zzjg/static/%E8%B5%84%E4%BA%A7%E5%AF%BC%E5%85%A5.xls")
     @PostMapping("/excel/import")
     public BaseResponse importAsset(@RequestParam("file") MultipartFile file) {
         if (file == null || file.isEmpty()) {
@@ -264,6 +264,46 @@ public class AssetController {
             LOGGER.error("导入失败：{}", e.getMessage());
             e.printStackTrace();
             return MessageUtil.error("资产导入失败:" + e.getMessage());
+        }
+    }
+
+    /**
+     * 解析excel资产信息.
+     * @param file excel文件
+     */
+    @ApiOperation(value = "解析excel资产信息", notes = "模板文件下载：http://192.168.1.129:8080/zzjg/static/%E8%B5%84%E4%BA%A7%E5%AF%BC%E5%85%A5.xls")
+    @PostMapping("/excel/analyze")
+    public BaseResponse analyzeAsset(@RequestParam("file") MultipartFile file) {
+        if (file == null || file.isEmpty()) {
+            return MessageUtil.error("选择文件为空!");
+        }
+        String fileName = file.getOriginalFilename();
+        // 判断文件格式
+        String exp = fileName.substring(fileName.lastIndexOf(".") + 1);
+        if (!"xls".equalsIgnoreCase(exp)) {
+            return MessageUtil.error("Excel文件类型错误,请上传xls文件!");
+        }
+        ImportParams importParams = new ImportParams();
+        // 数据处理
+        importParams.setHeadRows(1);
+        importParams.setTitleRows(1);
+        // 需要验证
+        importParams.setNeedVerify(false);
+        try {
+            ExcelImportResult<Asset> result = ExcelImportUtil.importExcelMore(file.getInputStream(), Asset.class,
+                    importParams);
+            List<Asset> assetList = result.getList();
+            if (assetList.isEmpty()) {
+                return MessageUtil.error("资产解析结果为空");
+            }
+            BaseResponse response = MessageUtil.success("资产解析成功");
+            response.setData(assetList);
+            return response;
+
+        } catch (Exception e) {
+            LOGGER.error("导入失败：{}", e.getMessage());
+            e.printStackTrace();
+            return MessageUtil.error("资产解析失败:" + e.getMessage());
         }
     }
 
