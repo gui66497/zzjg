@@ -30,6 +30,15 @@ public class Organization {
         return false;
     }
 
+    public Organization() {
+    }
+
+    public Organization(String id, String name, String pid) {
+        this.id = id;
+        this.name = name;
+        this.pid = pid;
+    }
+
     public String getId() {
         return id;
     }

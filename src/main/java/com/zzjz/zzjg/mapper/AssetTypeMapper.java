@@ -23,6 +23,13 @@ public interface AssetTypeMapper {
      */
     int deleteById(String id);
 
+    /**
+     * 批量删除资产类型.
+     * @param ids id数组
+     * @return 删除行数
+     */
+    int deleteBatch(String[] ids);
+
     int insert(AssetType record);
 
     int insertSelective(AssetType record);
@@ -80,4 +87,9 @@ public interface AssetTypeMapper {
      * @return 结果
      */
     int batchInsert(List<AssetType> assetTypeList);
+
+    /**
+     * 清空资产类型表.
+     */
+    void emptyAssetType();
 }

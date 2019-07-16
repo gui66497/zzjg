@@ -8,6 +8,7 @@ import com.github.wujun234.uid.UidGenerator;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.zzjz.zzjg.bean.Asset;
+import com.zzjz.zzjg.bean.AssetInit;
 import com.zzjz.zzjg.bean.AssetRequest;
 import com.zzjz.zzjg.bean.AssetType;
 import com.zzjz.zzjg.bean.BaseResponse;
@@ -305,6 +306,19 @@ public class AssetController {
             e.printStackTrace();
             return MessageUtil.error("资产解析失败:" + e.getMessage());
         }
+    }
+
+    /**
+     * 配置向导执行
+     * @param assetInit assetInit
+     * @return 结果
+     * @throws Exception Exception
+     */
+    @ApiOperation(value = "配置向导最终执行接口（注：该接口会清空原来的资产表和资产类型表）", notes = "参数模版JSON下载：http://192.168.1.129:8080/zzjg/static/init.json")
+    @PostMapping("init")
+    public BaseResponse init(@RequestBody AssetInit assetInit) throws Exception {
+        assetService.init(assetInit);
+        return MessageUtil.success("初始化成功");
     }
 
 }

@@ -54,6 +54,11 @@ public class AssetTypeServiceImpl implements AssetTypeService {
     }
 
     @Override
+    public boolean deleteByIdArr(String[] idArr) {
+        return assetTypeMapper.deleteBatch(idArr) > 0;
+    }
+
+    @Override
     public boolean deleteValidationAssetType(String typeId) {
         AssetType assetType = new AssetType();
         assetType.setPid(typeId);
@@ -108,6 +113,29 @@ public class AssetTypeServiceImpl implements AssetTypeService {
     @Override
     public boolean batchInsert(List<AssetType> assetTypeList) {
         return assetTypeMapper.batchInsert(assetTypeList) > 0;
+    }
+
+    @Override
+    public String createId(String pId) {
+        AssetType assetType = findLastByPId(pId);
+        if (assetType != null) {
+            String[] splitArr = assetType.getId().split("\\.");
+            Integer item = Integer.parseInt(splitArr[splitArr.length - 1]) + 1;
+            splitArr[splitArr.length - 1] = item.toString();
+            String id = StringUtils.join(splitArr, ".");
+            return id;
+        } else {
+            return pId + ".1";
+        }
+    }
+
+    @Override
+    public String plusId(String id, int num) {
+        String[] splitArr = id.split("\\.");
+        Integer item = Integer.parseInt(splitArr[splitArr.length - 1]);
+        item += num;
+        splitArr[splitArr.length - 1] = item.toString();
+        return StringUtils.join(splitArr, ".");
     }
 
     /**

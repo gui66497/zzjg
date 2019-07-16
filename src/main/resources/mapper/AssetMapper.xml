@@ -96,6 +96,9 @@
       #{item}
     </foreach>
   </delete>
+  <delete id="emptyAsset">
+    delete from asset
+  </delete>
   <insert id="insert" parameterType="com.zzjz.zzjg.bean.Asset">
     insert into asset (id, name, type, 
       create_user, create_time, update_user, 
@@ -206,8 +209,8 @@
     ) values
     <foreach collection="list" item="item" index="index" separator=",">
       (#{item.id}, #{item.name}, #{item.type},
-      #{item.organizeId}, #{item.createUser}, #{item.createTime},
-      #{item.updateUser}, #{item.updateTime}, #{item.manageIp},
+      #{item.organizeId}, #{item.createUser}, now(),
+      #{item.updateUser}, now(), #{item.manageIp},
       #{item.responsible}, #{item.responsiblePhone}, #{item.location}, #{item.onlineStatusCode})
     </foreach>
   </insert>
@@ -219,6 +222,9 @@
       </if>
       <if test="type != null">
         type = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="organizeId != null">
+        organize_id = #{organizeId,jdbcType=VARCHAR},
       </if>
       <if test="createUser != null">
         create_user = #{createUser,jdbcType=VARCHAR},

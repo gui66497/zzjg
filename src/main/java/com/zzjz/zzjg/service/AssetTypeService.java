@@ -33,6 +33,13 @@ public interface AssetTypeService {
     boolean deleteAssetTypeById(String id);
 
     /**
+     * 根据id删除资产类型.
+     * @param idArr id数组
+     * @return flag
+     */
+    boolean deleteByIdArr(String[] idArr);
+
+    /**
      * 根据资产类型查看该类型下是否有资产分类.
      * @param typeId the type id
      * @return true 可以删除
@@ -87,5 +94,20 @@ public interface AssetTypeService {
      * @return 结果
      */
     boolean batchInsert(List<AssetType> assetTypeList);
+
+    /**
+     * 根据父级ID生成ID.
+     * @param pId 父级id
+     * @return id
+     */
+    String createId(String pId);
+
+    /**
+     * id递增num次（如plusId('1.1.1',1)结果为1.1.2）.
+     * @param id id
+     * @param num num
+     * @return id
+     */
+    String plusId(String id, int num);
 
 }

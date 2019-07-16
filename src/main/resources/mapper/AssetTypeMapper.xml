@@ -80,6 +80,17 @@
     delete from asset_type
     where id = #{id,jdbcType=VARCHAR}
   </delete>
+`  <delete id="deleteBatch">
+    delete from asset_type
+    where id in
+    <foreach collection="array" item="item" index="no" open="("
+             separator="," close=")">
+      #{item}
+    </foreach>
+  </delete>
+  <delete id="emptyAssetType">
+      delete from asset_type
+  </delete>
   <insert id="insert" parameterType="com.zzjz.zzjg.bean.AssetType">
     insert into asset_type (id, create_user, create_time, 
       update_user, update_time, name_ch, 

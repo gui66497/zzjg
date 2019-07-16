@@ -1,6 +1,7 @@
 package com.zzjz.zzjg.service;
 
 import com.zzjz.zzjg.bean.Asset;
+import com.zzjz.zzjg.bean.AssetInit;
 import com.zzjz.zzjg.bean.AssetRequest;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -74,4 +75,10 @@ public interface AssetService {
      * @return 结果
      */
     boolean batchInsert(List<Asset> assetList);
+
+    /**
+     * 初始化资产类型和资产.
+     * @param assetInit assetInit
+     */
+    void init(AssetInit assetInit) throws Exception;
 }

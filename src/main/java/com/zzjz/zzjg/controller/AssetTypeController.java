@@ -21,6 +21,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -57,6 +58,12 @@ public class AssetTypeController {
     @Autowired
     AssetTypeService assetTypeService;
 
+    @Value("${server.port}")
+    String serverPort;
+
+    @Value("${ip}")
+    String ip;
+
     /**
      * 资产类型图片相对存放路径
      */
@@ -71,8 +78,12 @@ public class AssetTypeController {
     @GetMapping("/{id}")
     public BaseResponse<AssetType> getAssetTypeById(@PathVariable("id") String id) {
         AssetType assetType = assetTypeService.getAssetTypeById(id);
+        String pic = assetType.getPic();
+        if (StringUtils.isNotBlank(pic)) {
+            assetType.setPic("http://" + ip + ":" + serverPort + "/zzjg/" + pic);
+        }
         BaseResponse<AssetType> response = new BaseResponse<>();
-        if (assetType == null) {
+        if (assetType.getId() == null) {
             response.setMessage("没有查询到指定资产类型");
             response.setResultCode(ResultCode.RESULT_ERROR);
             return response;
@@ -93,6 +104,13 @@ public class AssetTypeController {
     @GetMapping("/list/{isAll}")
     public BaseResponse<AssetType> getAssetTypeList(@PathVariable String isAll) {
         Set<AssetType> assetTypeSet = assetTypeService.getAssetTypeList(isAll);
+        // 图片路径替换
+        for (AssetType assetType : assetTypeSet) {
+            String pic = assetType.getPic();
+            if (StringUtils.isNotBlank(pic)) {
+                assetType.setPic("http://" + ip + ":" + serverPort + "/zzjg/" + pic);
+            }
+        }
         BaseResponse<AssetType> response = new BaseResponse<>();
         response.setResultCode(ResultCode.RESULT_SUCCESS);
         response.setData(new ArrayList<>(assetTypeSet));
@@ -102,32 +120,48 @@ public class AssetTypeController {
 
     /**
      * 根据id删除资产类型.
-     * @param id id
+     * @param ids id
      * @return 结果
      */
     @ApiOperation("根据id删除资产类型")
-    @DeleteMapping("/{id}")
-    public BaseResponse deleteAssetTypeById(@PathVariable String id) {
-        String patth = FileUtil.getJarPath("static/image/assetType");
-        System.out.println("patth:" + patth);
-        System.out.println(1);
-        AssetType assetType = assetTypeService.getAssetTypeById(id);
-        if (assetType == null) {
-            return MessageUtil.error("删除失败！该资产不存在");
+    @ApiImplicitParam(name = "ids", value = "单个id或多个id以逗号分隔")
+    @DeleteMapping("/{ids}")
+    public BaseResponse deleteAssetTypeById(@PathVariable String ids) {
+        if (StringUtils.isBlank(ids)) {
+            return MessageUtil.error("参数不合法");
         }
-        //删除前验证
-        if (!assetTypeService.deleteValidationAssetType(id)) {
-            return MessageUtil.error("删除失败！该分类下有关联资产分类");
+        String[] idArr = ids.split(",");
+        List<String> errorList = Lists.newArrayList();
+        for (String id : idArr) {
+            StringBuilder stringBuilder = new StringBuilder();
+            AssetType assetType = assetTypeService.getAssetTypeById(id);
+            if (assetType == null) {
+                stringBuilder.append("无法删除,资产[").append(id).append("]不存在");
+            }
+            //删除前验证
+            if (!assetTypeService.deleteValidationAssetType(id)) {
+                stringBuilder.append("无法删除,资产[").append(id).append("]下有关联资产类型");
+            }
+            if (!assetTypeService.deleteValidationRes(id)) {
+                stringBuilder.append("无法删除,资产[").append(id).append("]下有关联资产");
+            }
+            if (StringUtils.isNotBlank(stringBuilder.toString())) {
+                errorList.add(stringBuilder.toString());
+            }
         }
-        if (!assetTypeService.deleteValidationRes(id)) {
-            return MessageUtil.error("删除失败！该分类下有关联资产");
-        }
-        boolean res = assetTypeService.deleteAssetTypeById(id);
-        if (res) {
-            return MessageUtil.success("删除资产类型[" + assetType.getNameCh() + "]成功");
+        if (errorList.isEmpty()) {
+            boolean res = assetTypeService.deleteByIdArr(idArr);
+            if (res) {
+                return MessageUtil.success("删除资产类型[" + ids + "]成功");
+            } else {
+                return MessageUtil.error("删除资产类型[" + ids + "]失败");
+            }
         } else {
-            return MessageUtil.error("删除资产类型[" + assetType.getNameCh() + "]失败");
+            BaseResponse response = MessageUtil.error(String.join("|", errorList));
+            response.setData(errorList);
+            return response;
         }
+
     }
 
     /**
@@ -146,7 +180,7 @@ public class AssetTypeController {
         String newId = null;
         try {
             if (StringUtils.isBlank(assetType.getId())) {
-                assetType.setId(createId(assetType.getPid()));
+                assetType.setId(assetTypeService.createId(assetType.getPid()));
             } else {
                 AssetType oldAssetType = assetTypeService.getAssetTypeById(assetType.getId());
                 if (oldAssetType != null) {
@@ -154,7 +188,7 @@ public class AssetTypeController {
                     assetType.setPic(delPic);
                     //判断是否修改了上级资产类型
                     if (!assetType.getPid().equals(oldAssetType.getPid())) {
-                        newId = createId(assetType.getPid());
+                        newId = assetTypeService.createId(assetType.getPid());
                     }
                 }
             }
@@ -269,10 +303,10 @@ public class AssetTypeController {
                 } else if (errorInfo.isEmpty()) {
                     // 这里要考虑多个同级 id需要递增
                     if (map.get(pid) == null) {
-                        assetType.setId(createId(pid));
+                        assetType.setId(assetTypeService.createId(pid));
                         map.put(pid, 1);
                     } else {
-                        assetType.setId(plusId(createId(pid), map.get(pid)));
+                        assetType.setId(assetTypeService.plusId(assetTypeService.createId(pid), map.get(pid)));
                         map.put(pid, map.get(pid) + 1);
                     }
                     assetType.setCreateTime(new Date());
@@ -335,38 +369,6 @@ public class AssetTypeController {
             e.printStackTrace();
             return MessageUtil.error("资产类型导入失败:" + e.getMessage());
         }
-    }
-
-    /**
-     * 根据父级ID生成ID.
-     * @param pId 父级id
-     * @return id
-     */
-    private String createId(String pId) {
-        AssetType assetType = assetTypeService.findLastByPId(pId);
-        if (assetType != null) {
-            String[] splitArr = assetType.getId().split("\\.");
-            Integer item = Integer.parseInt(splitArr[splitArr.length - 1]) + 1;
-            splitArr[splitArr.length - 1] = item.toString();
-            String id = StringUtils.join(splitArr, ".");
-            return id;
-        } else {
-            return pId + ".1";
-        }
-    }
-
-    /**
-     * id递增num次（如plusId('1.1.1',1)结果为1.1.2）.
-     * @param id id
-     * @param num num
-     * @return id
-     */
-    private static  String plusId(String id, int num) {
-        String[] splitArr = id.split("\\.");
-        Integer item = Integer.parseInt(splitArr[splitArr.length - 1]);
-        item += num;
-        splitArr[splitArr.length - 1] = item.toString();
-        return StringUtils.join(splitArr, ".");
     }
 
 }

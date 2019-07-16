@@ -83,4 +83,8 @@ public interface AssetMapper {
      */
     int batchInsert(List<Asset> assetList);
 
+    /**
+     * 清空资产表.
+     */
+    void emptyAsset();
 }
