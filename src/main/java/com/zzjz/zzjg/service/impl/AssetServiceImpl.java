@@ -106,7 +106,7 @@ public class AssetServiceImpl implements AssetService {
             if (StringUtils.isBlank(id) || StringUtils.isBlank(pid) ) {
                 throw new Exception("初始化时,资产类型需要指定ID和父级ID");
             }
-            assetType.setCreateTime(new DateTime().withZone(DateTimeZone.forID("Asia/Shanghai")).toDate());
+            assetType.setCreateTime(new Date());
             assetType.setUpdateTime(new Date());
         }
         assetTypeMapper.batchInsert(assetTypeList);

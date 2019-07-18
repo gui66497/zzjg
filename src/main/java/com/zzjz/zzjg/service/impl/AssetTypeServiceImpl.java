@@ -34,6 +34,16 @@ public class AssetTypeServiceImpl implements AssetTypeService {
     }
 
     @Override
+    public AssetType getAssetTypeByChName(String chName) {
+        return assetTypeMapper.getAssetTypeByChName(chName);
+    }
+
+    @Override
+    public AssetType getAssetTypeByEnName(String enName) {
+        return assetTypeMapper.getAssetTypeByEnName(enName);
+    }
+
+    @Override
     public Set<AssetType> getAssetTypeList(String isAll) {
         List<AssetType> assetTypeList = assetTypeMapper.queryAssetTypeList(isAll);
         Set<AssetType> assetTypeSet = new HashSet<>(assetTypeList);

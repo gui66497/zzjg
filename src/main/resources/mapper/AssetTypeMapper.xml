@@ -76,11 +76,25 @@
       and name_en = #{nameEn,jdbcType=VARCHAR}
     </if>
   </select>
+  <select id="getAssetTypeByChName" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />,
+    ifnull((SELECT name_ch FROM asset_type WHERE id = pid),'全部资产') pname
+    from asset_type
+    where name_ch = #{chName,jdbcType=VARCHAR}
+  </select>
+  <select id="getAssetTypeByEnName" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />,
+    ifnull((SELECT name_ch FROM asset_type WHERE id = pid),'全部资产') pname
+    from asset_type
+    where name_en = #{enName,jdbcType=VARCHAR}
+  </select>
   <delete id="deleteById" parameterType="java.lang.String">
     delete from asset_type
     where id = #{id,jdbcType=VARCHAR}
   </delete>
-`  <delete id="deleteBatch">
+  <delete id="deleteBatch">
     delete from asset_type
     where id in
     <foreach collection="array" item="item" index="no" open="("
@@ -214,7 +228,7 @@
   </update>
   <update id="updateId">
     update asset_type
-    set smc_id = #{newId,jdbcType=VARCHAR}
-    where smc_id = #{id,jdbcType=VARCHAR}
+    set id = #{newId,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

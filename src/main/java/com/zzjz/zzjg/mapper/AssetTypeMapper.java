@@ -92,4 +92,18 @@ public interface AssetTypeMapper {
      * 清空资产类型表.
      */
     void emptyAssetType();
+
+    /**
+     * 根据中文名获取资产类型.
+     * @param chName 中文名
+     * @return 资产类型
+     */
+    AssetType getAssetTypeByChName(String chName);
+
+    /**
+     * 根据英文名获取资产类型.
+     * @param enName 英文名
+     * @return 资产类型
+     */
+    AssetType getAssetTypeByEnName(String enName);
 }

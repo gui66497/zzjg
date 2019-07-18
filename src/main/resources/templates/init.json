@@ -1,0 +1,22 @@
+{
+	"assetList": [{
+		"name": "硬件资产A",
+		"typeName": "硬件资产",
+		"manageIp": "192.168.1.1"
+	}, {
+		"name": "安全设备B",
+		"typeName": "安全设备",
+		"manageIp": "192.168.1.2"
+	}],
+	"assetTypeList": [{
+		"id": "1.1",
+		"nameCh": "硬件资产",
+		"nameEn": "hardware",
+		"pid": "1"
+	}, {
+		"id": "1.1.1",
+		"nameCh": "安全设备",
+		"nameEn": "network",
+		"pid": "1.1"
+	}]
+}

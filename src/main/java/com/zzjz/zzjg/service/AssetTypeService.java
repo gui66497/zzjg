@@ -19,6 +19,20 @@ public interface AssetTypeService {
     AssetType getAssetTypeById(String id);
 
     /**
+     * 根据中文名获取资产类型.
+     * @param chName 中文名
+     * @return 资产类型
+     */
+    AssetType getAssetTypeByChName(String chName);
+
+    /**
+     * 根据英文名获取资产类型.
+     * @param enName 英文名
+     * @return 资产类型
+     */
+    AssetType getAssetTypeByEnName(String enName);
+
+    /**
      * 查询所有资产类型.
      * @param isAll 是否全部显示，1是,0只显示有资产的类型
      * @return 资产类型列表

@@ -42,6 +42,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * @author 房桂堂
@@ -178,18 +179,44 @@ public class AssetTypeController {
                                       HttpServletRequest request) {
         String delPic = "";
         String newId = null;
+        if (StringUtils.isBlank(assetType.getNameCh()) || StringUtils.isBlank(assetType.getNameEn()) ||
+                StringUtils.isBlank(assetType.getPid())) {
+            return MessageUtil.error("中文名、英文名、父级ID为必填项");
+        }
         try {
             if (StringUtils.isBlank(assetType.getId())) {
+                //新增
+
+                if (assetTypeService.getAssetTypeByEnName(assetType.getNameEn()) != null) {
+                    return MessageUtil.error("已存在英文名为[" + assetType.getNameEn() + "]的资产类型");
+                }
+                if (assetTypeService.getAssetTypeByChName(assetType.getNameCh()) != null) {
+                    return MessageUtil.error("已存在中文名为[" + assetType.getNameCh() + "]的资产类型");
+                }
                 assetType.setId(assetTypeService.createId(assetType.getPid()));
+
             } else {
+                //修改
                 AssetType oldAssetType = assetTypeService.getAssetTypeById(assetType.getId());
                 if (oldAssetType != null) {
+                    if (!oldAssetType.getNameEn().equals(assetType.getNameEn())) {
+                        if (assetTypeService.getAssetTypeByEnName(assetType.getNameEn()) != null) {
+                            return MessageUtil.error("已存在英文名为[" + assetType.getNameEn() + "]的资产类型");
+                        }
+                    }
+                    if (!oldAssetType.getNameCh().equals(assetType.getNameCh())) {
+                        if (assetTypeService.getAssetTypeByChName(assetType.getNameCh()) != null) {
+                            return MessageUtil.error("已存在中文名为[" + assetType.getNameCh() + "]的资产类型");
+                        }
+                    }
                     delPic = oldAssetType.getPic();
                     assetType.setPic(delPic);
                     //判断是否修改了上级资产类型
                     if (!assetType.getPid().equals(oldAssetType.getPid())) {
                         newId = assetTypeService.createId(assetType.getPid());
                     }
+                } else {
+                    return MessageUtil.error("ID为[" + assetType.getId() + "]的资产类型不存在");
                 }
             }
 
@@ -314,8 +341,14 @@ public class AssetTypeController {
                     finalAssetTypeList.add(assetType);
                 }
             }
+            if (finalAssetTypeList.stream().map(AssetType::getNameEn).collect(Collectors.toSet()).size() < finalAssetTypeList.size()) {
+                return MessageUtil.error("资产类型英文名重复");
+            }
+            if (finalAssetTypeList.stream().map(AssetType::getNameCh).collect(Collectors.toSet()).size() < finalAssetTypeList.size()) {
+                return MessageUtil.error("资产类型中文名重复");
+            }
             if (errorInfo.isEmpty()) {
-                //批量插入资产数据
+                //批量插入资产类型数据
                 assetTypeService.batchInsert(finalAssetTypeList);
                 return MessageUtil.success("资产类型导入成功");
             } else {
