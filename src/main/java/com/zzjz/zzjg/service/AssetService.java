@@ -15,9 +15,16 @@ import java.util.List;
 public interface AssetService {
 
     /**
-     * 根据名字查找资产.
+     * 根据id查找资产.
      */
     Asset selectAssetById(String id);
+
+    /**
+     * 多条件查询资产.
+     * @param asset 资产
+     * @return 结果
+     */
+    List<Asset> find(Asset asset);
 
     /**
      * 分页获取资产列表.

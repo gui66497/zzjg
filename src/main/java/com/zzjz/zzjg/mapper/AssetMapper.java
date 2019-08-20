@@ -87,4 +87,11 @@ public interface AssetMapper {
      * 清空资产表.
      */
     void emptyAsset();
+
+    /**
+     * 多条件查询资产.
+     * @param asset 资产实体
+     * @return 结果
+     */
+    List<Asset> find(Asset asset);
 }

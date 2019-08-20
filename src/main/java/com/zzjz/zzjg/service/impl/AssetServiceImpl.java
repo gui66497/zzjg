@@ -52,6 +52,11 @@ public class AssetServiceImpl implements AssetService {
     }
 
     @Override
+    public List<Asset> find(Asset asset) {
+        return assetMapper.find(asset);
+    }
+
+    @Override
     public List<Asset> getAssetList(AssetRequest request) {
         PagingEntity paging = request.getPaging();
         PageHelper.startPage(paging.getPageNo(), paging.getPageSize());

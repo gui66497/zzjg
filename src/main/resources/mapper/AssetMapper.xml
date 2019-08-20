@@ -84,6 +84,55 @@
     and a.manage_ip = #{ip,jdbcType=VARCHAR}
     and o.name = #{organizeName,jdbcType=VARCHAR}
   </select>
+  <select id="find" resultType="com.zzjz.zzjg.bean.Asset">
+    SELECT
+    <include refid="Base_Column_List" />
+    FROM asset
+    where 1=1
+
+    <if test="id != null">
+      and id = #{id,jdbcType=VARCHAR}
+    </if>
+    <if test="name != null">
+      and name = #{name,jdbcType=VARCHAR}
+    </if>
+    <if test="type != null">
+      and type = #{type,jdbcType=VARCHAR}
+    </if>
+    <if test="organizeId != null">
+      and organize_id = #{organizeId,jdbcType=VARCHAR}
+    </if>
+    <if test="createUser != null">
+      and create_user = #{createUser,jdbcType=VARCHAR}
+    </if>
+    <if test="updateUser != null">
+      and update_user = #{updateUser,jdbcType=VARCHAR}
+    </if>
+    <if test="manageIp != null">
+      and manage_ip = #{nameCh,jdbcType=VARCHAR}
+    </if>
+    <if test="responsible != null">
+      and responsible = #{nameCh,jdbcType=VARCHAR}
+    </if>
+    <if test="responsiblePhone != null">
+      and responsible_phone = #{nameCh,jdbcType=VARCHAR}
+    </if>
+    <if test="location != null">
+      and location = #{nameCh,jdbcType=VARCHAR}
+    </if>
+    <if test="onlineStatusCode != null">
+      and online_status_code = #{nameCh,jdbcType=VARCHAR}
+    </if>
+
+
+
+    <if test="nameCh != null">
+      and name_ch = #{nameCh,jdbcType=VARCHAR}
+    </if>
+    <if test="nameEn != null">
+      and name_en = #{nameEn,jdbcType=VARCHAR}
+    </if>
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from asset
     where id = #{id,jdbcType=VARCHAR}
