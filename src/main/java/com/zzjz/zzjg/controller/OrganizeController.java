@@ -35,13 +35,11 @@ public class OrganizeController {
      */
     @ApiOperation("根据id获取指定组织机构")
     @GetMapping("/{id}")
-    public BaseResponse<Organization> getOrganizeById(@PathVariable("id") String id) {
+    public BaseResponse<Organization> getOrganizeById(@PathVariable("id") String id) throws Exception {
         Organization organization = organizeService.getOrganizeById(id);
         BaseResponse<Organization> response = new BaseResponse<>();
         if (organization == null) {
-            response.setMessage("没有查询到指定组织机构");
-            response.setResultCode(ResultCode.RESULT_ERROR);
-            return response;
+            throw new Exception("没有查询到指定组织机构");
         }
         response.setMessage("查询组织机构成功");
         response.setObj(organization);
