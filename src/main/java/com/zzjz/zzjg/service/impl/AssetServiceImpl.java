@@ -12,10 +12,7 @@ import com.zzjz.zzjg.mapper.AssetMapper;
 import com.zzjz.zzjg.mapper.AssetTypeMapper;
 import com.zzjz.zzjg.mapper.OrganizationMapper;
 import com.zzjz.zzjg.service.AssetService;
-import com.zzjz.zzjg.service.AssetTypeService;
 import org.apache.commons.lang3.StringUtils;
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,9 +33,6 @@ public class AssetServiceImpl implements AssetService {
 
     @Autowired
     AssetTypeMapper assetTypeMapper;
-
-    @Autowired
-    AssetTypeService assetTypeService;
 
     @Autowired
     OrganizationMapper organizationMapper;
