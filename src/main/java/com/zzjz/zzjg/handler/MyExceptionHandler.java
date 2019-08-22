@@ -21,7 +21,7 @@ public class MyExceptionHandler {
      * @param exception 异常
      * @return response
      */
-    @ExceptionHandler
+    @ExceptionHandler(value = Exception.class)
     @ResponseBody
     public BaseResponse<String> exceptionHandler(HttpServletRequest req, Exception exception) {
         BaseResponse<String> response = new BaseResponse<>();
