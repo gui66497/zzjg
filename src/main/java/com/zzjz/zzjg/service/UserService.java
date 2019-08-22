@@ -1,6 +1,7 @@
 package com.zzjz.zzjg.service;
 
 import com.zzjz.zzjg.bean.User;
+import java.util.List;
 
 /**
  * @author 房桂堂
@@ -22,5 +23,11 @@ public interface UserService {
      * @return 用户
      */
     User getById(long id);
+
+    /**
+     * 获取所有用户.
+     * @return 用户列表
+     */
+    List<User> getAllUser();
 
 }

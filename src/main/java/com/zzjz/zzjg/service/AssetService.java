@@ -3,7 +3,6 @@ package com.zzjz.zzjg.service;
 import com.zzjz.zzjg.bean.Asset;
 import com.zzjz.zzjg.bean.AssetInit;
 import com.zzjz.zzjg.bean.AssetRequest;
-import org.springframework.stereotype.Service;
 import java.util.List;
 
 /**
@@ -11,7 +10,6 @@ import java.util.List;
  * @description AssetService
  * @date 2019/7/4 14:23
  */
-@Service
 public interface AssetService {
 
     /**

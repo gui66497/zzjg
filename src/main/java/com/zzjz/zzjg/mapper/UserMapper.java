@@ -1,6 +1,7 @@
 package com.zzjz.zzjg.mapper;
 
 import com.zzjz.zzjg.bean.User;
+import java.util.List;
 
 /**
  * @Description: 用户Mapper
@@ -27,4 +28,10 @@ public interface UserMapper {
      * @return 用户实体
      */
     User getByUserName(String userName);
+
+    /**
+     * 获取所有用户.
+     * @return 用户列表
+     */
+    List<User> queryAllUser();
 }

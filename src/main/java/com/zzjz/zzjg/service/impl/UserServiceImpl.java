@@ -5,6 +5,7 @@ import com.zzjz.zzjg.mapper.UserMapper;
 import com.zzjz.zzjg.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import java.util.List;
 
 /**
  * @Description 用户service实现类
@@ -25,5 +26,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getById(long id) {
         return userMapper.selectByPrimaryKey(id);
+    }
+
+    @Override
+    public List<User> getAllUser() {
+        return userMapper.queryAllUser();
     }
 }
