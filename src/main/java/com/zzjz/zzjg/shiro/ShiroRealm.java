@@ -59,7 +59,7 @@ public class ShiroRealm extends AuthorizingRealm {
         }
 
         if(!JwtUtil.verify(token, username, user.getPassword())){
-            throw new AuthenticationException("密码错误");
+            throw new AuthenticationException("验证失败");
         }
 
         return new SimpleAuthenticationInfo(token, token, getName());
