@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zzjz.zzjg.mapper.ConditionMapper">
+  <sql id="Condition_Common">
+    FROM datagather da
+    LEFT JOIN asset_kpi ak ON da.asset_kpi=ak.id
+    LEFT JOIN kpi_type kt ON ak.kpi_type=kt.id
+  </sql>
+  <select id="getCPUCondition" resultType="com.zzjz.zzjg.bean.CPUConditon">
+    SELECT da.id AS cpuid,da.count_value AS cpuUtilization,da.kpi_detail AS cpuDetail,da.value_type AS cpuValueType,da.create_time AS cpuCreateTime
+    <include refid="Condition_Common"></include>
+    WHERE ak.asset=#{id,jdbcType=VARCHAR}
+    AND kt.name_en=#{cpuutilize,jdbcType=VARCHAR}
+  </select>
+  <select id="getMemoryCondition" resultType="com.zzjz.zzjg.bean.MemoryCondition">
+    SELECT da.id AS memoryid,da.count_value AS memoryUtilization,da.kpi_detail AS memoryDetail,da.value_type AS memoryValueType,da.create_time AS memoryCreateTime
+    <include refid="Condition_Common"></include>
+    WHERE ak.asset=#{id,jdbcType=VARCHAR}
+    AND kt.name_en=#{memoryutilize,jdbcType=VARCHAR}
+  </select>
+</mapper>

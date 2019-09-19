@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zzjz.zzjg.mapper.AssetHistoryMapper">
+    <resultMap id="HistoryResultMap" type="com.zzjz.zzjg.bean.AssetHistory">
+        <id column="id" jdbcType="VARCHAR" property="id" />
+        <result column="asset_id" jdbcType="VARCHAR" property="assetId" />
+        <result column="ip" jdbcType="VARCHAR" property="ip"/>
+        <result column="mac_address" jdbcType="VARCHAR" property="macAddress"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="detail" jdbcType="VARCHAR" property="detail"/>
+        <result column="status" jdbcType="VARCHAR" property="status"/>
+        <result column="address" jdbcType="VARCHAR" property="address"/>
+        <result column="create_user" jdbcType="VARCHAR" property="createUser"/>
+        <result column="update_user" jdbcType="VARCHAR" property="updateUser"/>
+        <result column="responsible" jdbcType="VARCHAR" property="responsible"/>
+        <result column="responsible_phone" jdbcType="VARCHAR" property="responsiblePhone"/>
+    </resultMap>
+    <sql id="History_Column">
+        ah.id,ah.asset_id,ah.ip,ah.mac_address,ah.status,ah.create_time,ah.update_time,ah.detail,ah.address,
+        ah.create_user,ah.update_user,ah.responsible,ah.responsible_phone
+    </sql>
+    <sql id="Base_Column">
+        id as id,asset_id as assetId,ip as ip,mac_address as macAddress,status as status,create_time as createTime,
+        update_time as updateTime,detail as detail,address as address,create_user as createUser,update_user as updateUser,
+        responsible as responsible,responsible_phone as responsiblePhone
+    </sql>
+    <select id="getAssetHistory" resultMap="HistoryResultMap" parameterType="com.zzjz.zzjg.bean.AssetRequest">
+        SELECT
+        <include refid="History_Column"></include>
+        FROM asset_history ah
+        LEFT JOIN asset a
+        ON ah.asset_id=a.id
+        WHERE 1=1
+        <if test="type != null">
+            and a.type = #{type}
+        </if>
+        <if test="organizeId != null">
+            and a.organize_id = #{organizeId}
+        </if>
+        <if test="searchParam != null">
+            and a.name like '%${searchParam}%' or a.manage_ip like '%${searchParam}%'
+        </if>
+        ORDER BY ah.update_time DESC,ah.create_time DESC
+    </select>
+    <delete id="deleteAssetHistoryByIds">
+        delete from asset_history
+        where id in
+        <foreach collection="array" item="item" index="no" open="("
+                 separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+    <insert id="addAssetHistory" parameterType="com.zzjz.zzjg.bean.HistoryRequest">
+        insert into asset_history (id,asset_id,ip,mac_address,status,create_time,update_time,
+        detail,address,create_user,update_user,responsible,responsible_phone)
+        values (#{id,jdbcType=VARCHAR},#{assetId,jdbcType=VARCHAR},#{ip,jdbcType=VARCHAR},
+        #{macAddress,jdbcType=VARCHAR},#{status,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP},
+        #{updateTime,jdbcType=TIMESTAMP},#{detail,jdbcType=VARCHAR},#{address,jdbcType=VARCHAR},
+        #{createUser,jdbcType=VARCHAR},#{updateUser,jdbcType=VARCHAR},#{responsible,jdbcType=VARCHAR},
+        #{responsiblePhone,jdbcType=VARCHAR})
+    </insert>
+    <update id="updateAssetHistory" parameterType="com.zzjz.zzjg.bean.HistoryRequest">
+        update asset_history
+        <set>
+            <if test="assetId != null">
+                asset_id=#{assetId,jdbcType=VARCHAR},
+            </if>
+            <if test="ip != null">
+                ip=#{ip,jdbcType=VARCHAR},
+            </if>
+            <if test="macAddress != null">
+                mac_address=#{macAddress,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                status=#{status,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                create_time=#{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                update_time=#{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="detail != null">
+                detail=#{detail,jdbcType=VARCHAR},
+            </if>
+            <if test="address != null">
+                address=#{address,jdbcType=VARCHAR},
+            </if>
+            <if test="createUser != null">
+                create_user=#{createUser,jdbcType=VARCHAR},
+            </if>
+            <if test="updateUser != null">
+                update_user=#{updateUser,jdbcType=VARCHAR},
+            </if>
+            <if test="responsible != null">
+                responsible=#{responsible,jdbcType=VARCHAR},
+            </if>
+            <if test="responsiblePhone != null">
+                responsible_phone=#{responsiblePhone,jdbcType=VARCHAR}
+            </if>
+        </set>
+        where id=#{id,jdbcType=VARCHAR}
+    </update>
+    <select id="selectHistoryById" resultType="com.zzjz.zzjg.bean.HistoryRequest">
+        select
+        <include refid="Base_Column"></include>
+        from asset_history
+        where id=#{id,jdbcType=VARCHAR}
+    </select>
+    <select id="getAllAssetHistory" resultType="com.zzjz.zzjg.bean.HistoryRequest">
+        select
+        <include refid="Base_Column"></include>
+        from asset_history
+        order by update_time desc,create_time desc
+    </select>
+    <select id="selectHistoryByAssetNameAndIp" resultType="com.zzjz.zzjg.bean.HistoryRequest">
+        select
+        <include refid="History_Column"></include>
+        from asset_history ah
+        left join asset a
+        on ah.asset_id=a.id
+        where a.name=#{assetName,jdbcType=VARCHAR}
+        and ah.ip=#{ip,jdbcType=VARCHAR}
+    </select>
+    <insert id="batchInsert" parameterType="java.util.List">
+        insert into asset_history (id,asset_id,ip,mac_address,status,create_time,update_time,
+        detail,address,create_user,update_user,responsible,responsible_phone)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.id},#{item.assetId},#{item.ip},
+            #{item.macAddress},#{item.status},now(),
+            now(),#{item.detail},#{item.address},
+            #{item.createUser},#{item.updateUser},#{item.responsible},
+            #{item.responsiblePhone})
+        </foreach>
+    </insert>
+</mapper>

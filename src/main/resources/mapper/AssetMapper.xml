@@ -109,28 +109,25 @@
       and update_user = #{updateUser,jdbcType=VARCHAR}
     </if>
     <if test="manageIp != null">
-      and manage_ip = #{nameCh,jdbcType=VARCHAR}
+      and manage_ip = #{manageIp,jdbcType=VARCHAR}
     </if>
     <if test="responsible != null">
-      and responsible = #{nameCh,jdbcType=VARCHAR}
+      and responsible = #{responsible,jdbcType=VARCHAR}
     </if>
     <if test="responsiblePhone != null">
-      and responsible_phone = #{nameCh,jdbcType=VARCHAR}
+      and responsible_phone = #{responsiblePhone,jdbcType=VARCHAR}
     </if>
     <if test="location != null">
       and location = #{nameCh,jdbcType=VARCHAR}
     </if>
     <if test="onlineStatusCode != null">
-      and online_status_code = #{nameCh,jdbcType=VARCHAR}
+      and online_status_code = #{location,jdbcType=VARCHAR}
     </if>
-
-
-
-    <if test="nameCh != null">
-      and name_ch = #{nameCh,jdbcType=VARCHAR}
+    <if test="createTime != null">
+      and create_time = #{createTime,jdbcType=TIMESTAMP}
     </if>
-    <if test="nameEn != null">
-      and name_en = #{nameEn,jdbcType=VARCHAR}
+    <if test="updateTime != null">
+      and update_time = #{updateTime,jdbcType=TIMESTAMP}
     </if>
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">

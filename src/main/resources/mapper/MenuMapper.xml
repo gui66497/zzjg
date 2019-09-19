@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zzjz.zzjg.mapper.MenuMapper">
+  <select id="getMenuByPid" resultType="com.zzjz.zzjg.bean.Menu">
+    SELECT id,name,url,pid
+    FROM menu
+    WHERE 1=1
+    <if test="pid != null">
+        and pid=#{pid,jdbcType=INTEGER}
+    </if>
+    <if test="pid == null">
+      and pid is null
+    </if>
+  </select>
+  <select id="countChildrenMenu" resultType="java.lang.Integer">
+    SELECT COUNT(*) FROM menu WHERE pid=#{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteMenu" parameterType="java.lang.Integer">
+    delete from menu where id=#{id,jdbcType=INTEGER}
+  </delete>
+  <update id="updateMenu" parameterType="com.zzjz.zzjg.bean.Menu">
+    update menu
+    <set>
+      <if test="name != null">
+        name=#{name,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null">
+        url=#{url,jdbcType=VARCHAR},
+      </if>
+      <if test="pid != null">
+        pid=#{pid,jdbcType=INTEGER}
+      </if>
+    </set>
+    where id=#{id,jdbcType=INTEGER}
+  </update>
+  <insert id="addMenu" parameterType="com.zzjz.zzjg.bean.Menu">
+    insert into menu values (null,#{name,jdbcType=VARCHAR},
+    #{url,jdbcType=VARCHAR},#{pid,jdbcType=INTEGER})
+  </insert>
+  <select id="getMenuById" parameterType="java.lang.Integer" resultType="com.zzjz.zzjg.bean.Menu">
+    select id,name,url,pid
+    from menu
+    where id=#{id,jdbcType=INTEGER}
+  </select>
+  <select id="getAllMenu" resultType="com.zzjz.zzjg.bean.Menu">
+    select id,name,url,pid
+    from menu
+  </select>
+</mapper>

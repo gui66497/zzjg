@@ -16,7 +16,7 @@ import java.util.Date;
 public class JwtUtil {
 
     /**
-     * 过期时间 5天.
+     * Token过期时间 5天.
      */
     private static final long EXPIRE_TIME = 5*24*60*60*1000;
 

@@ -81,7 +81,8 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
         try {
             executeLogin(request, response);
 
-            // 认证成功后判断是否需要刷新token
+            // 认证成功后判断该token是否需要续期
+            // 这里逻辑为：Token过期时间为5天 续期时间为1一天 一旦发现用户的Token的签发已经超过1天就重新颁发一个token 前台相应地也要重设token
             String oldToken = getAuthzHeader(request);
             boolean shouldRefresh = shouldTokenRefresh(Objects.requireNonNull(JwtUtil.getIssuedAt(oldToken)));
             if (shouldRefresh) {
@@ -137,7 +138,7 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
     }
 
     /**
-     * 判断是否需要刷新TOKEN.
+     * 判断TOKEN是否需要续期.
      * @param issueAt token签发日期
      * @return 是否需要刷新TOKEN
      */
